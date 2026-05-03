@@ -2,6 +2,7 @@ data/
 *.csv
 *.xlsx
 *.parquet
+*.db
 __pycache__/
 .ipynb_checkpoints/
 .env
