@@ -76,10 +76,6 @@ def home():
                 is lower than the day-ahead price.
             </p>
 
-            <p>
-                <a class="button" href="/docs">Open API Docs</a>
-                <a class="button" href="/static/sample_input.csv">Download Sample CSV</a>
-            </p>
 
             <h2>Expected Input Format</h2>
             <p>Upload a CSV with the same structure as the original test data.</p>
