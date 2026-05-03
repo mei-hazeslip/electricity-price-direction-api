@@ -12,6 +12,11 @@ license: mit
 
 > **Check out the [interactive project page](https://mei-hazeslip.github.io/electricity-trading.html) for a simple breakdown and project summary.**
 
+## Live Demo
+
+- FastAPI app: https://mei-hazeslip-electricity-price-direction-api.hf.space/
+- API docs: https://mei-hazeslip-electricity-price-direction-api.hf.space/docs
+
 This project predicts the hourly direction of electricity price spreads between the day-ahead market and the real-time market. The target is whether the real-time price is lower than the day-ahead price, which can help electricity buyers evaluate potential bidding and procurement strategies.
 
 The original work began as a machine learning notebook and was refactored into a deployable FastAPI application with reusable preprocessing, feature engineering, model training, and prediction scripts.
@@ -101,7 +106,6 @@ The original electricity-market training data is not included in this repository
 
 Planned improvements include:
 
-deploying the API to Hugging Face Spaces
 adding SQLite-based prediction logging
 adding a simple web interface for CSV upload
 improving model monitoring and input validation
