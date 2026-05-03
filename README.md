@@ -1,3 +1,13 @@
+---
+title: Electricity Price Direction API
+emoji: ⚡
+colorFrom: green
+colorTo: blue
+sdk: docker
+app_port: 7860
+pinned: false
+license: mit
+---
 # Electricity Price Spread Direction Prediction API
 
 > **Check out the [interactive project page](https://mei-hazeslip.github.io/electricity-trading.html) for a simple breakdown and project summary.**
