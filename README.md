@@ -46,6 +46,7 @@ CSV upload
 
 ## Live Demo
 > **[FastAPI App](https://mei-hazeslip-electricity-price-direction-api.hf.space/)**
+
 > **[API docs](https://mei-hazeslip-electricity-price-direction-api.hf.space/docs)**
 
 Use the POST /predict-csv endpoint to upload a CSV file and return prediction results. Use the GET /logs endpoint to view recent prediction request summaries.
