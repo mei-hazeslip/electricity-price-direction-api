@@ -66,12 +66,12 @@ The model outputs a probability that the real-time price is lower than the day-a
 Install dependencies:
 
 
-```text
+```bash
 pip install -r requirements.txt
 ```
 
 Run the FastAPI app:
-```text
+```bash
 python -m uvicorn app:app --reload
 ```
 Open the API documentation page:
