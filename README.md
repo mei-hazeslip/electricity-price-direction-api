@@ -12,18 +12,14 @@ license: mit
 
 > **Check out the [interactive project page](https://mei-hazeslip.github.io/electricity-trading.html) for a simple breakdown and project summary.**
 
-## Live Demo
-
-- FastAPI app: https://mei-hazeslip-electricity-price-direction-api.hf.space/
-- API docs: https://mei-hazeslip-electricity-price-direction-api.hf.space/docs
-
 This project predicts the hourly direction of electricity price spreads between the day-ahead market and the real-time market. The target is whether the real-time price is lower than the day-ahead price, which can help electricity buyers evaluate potential bidding and procurement strategies.
 
-The original work began as a machine learning notebook and was refactored into a deployable FastAPI application with reusable preprocessing, feature engineering, model training, and prediction scripts.
+The original work began as a machine learning notebook and was refactored into a deployable FastAPI application with reusable preprocessing, feature engineering, model training, prediction scripts, and SQLite-based prediction logging.
 
 ## Project Objective
 
 Companies with high electricity consumption often need to decide how much electricity to commit to in the day-ahead market versus how much exposure to leave for the real-time market. If the real-time price is lower than the day-ahead price, there may be an opportunity to reduce costs.
+
 
 The goal of this project is to predict:
 
@@ -36,6 +32,7 @@ The goal of this project is to predict:
 
 This repository contains a lightweight model-serving API built with FastAPI. Users can upload a CSV file with the same schema as the test data, and the API returns predicted probabilities for whether the real-time electricity price will be lower than the day-ahead price.
 
+
 Current workflow:
 
 ```text
@@ -44,23 +41,44 @@ CSV upload
 → feature engineering
 → LightGBM prediction
 → probability summary and sample predictions
+→ SQLite prediction logging
 ```
+
+## Live Demo
+> **[FastAPI App](https://mei-hazeslip-electricity-price-direction-api.hf.space/)**
+> **[API docs](https://mei-hazeslip-electricity-price-direction-api.hf.space/docs)**
+
+Use the POST /predict-csv endpoint to upload a CSV file and return prediction results. Use the GET /logs endpoint to view recent prediction request summaries.
+
+### Example Input Format
+
+Upload a CSV with the same structure as the original test data.
+
+![Example input table](static/example_input_table.png)
+
 
 ## Project Structure
 
 ```text
 electricity-price-api/
-├── app.py                  # FastAPI application
-├── requirements.txt        # Python dependencies
+├── app.py                    # FastAPI application
+├── Dockerfile                # Docker configuration for Hugging Face deployment
+├── requirements.txt          # Python dependencies
+├── README.md                 # Project documentation
+├── .gitignore                # Files excluded from version control
 ├── models/
-│   └── lgbm_model.pkl      # Saved LightGBM model artifact
+│   └── lgbm_model.pkl        # Saved LightGBM model artifact
+├── static/
+│   └── example_input_table.png
 ├── src/
-│   ├── data_transformer.py # Data loading and column renaming
-│   ├── features.py         # Feature engineering pipeline
-│   ├── train_model.py      # Model training script
-│   └── predict.py          # Local batch prediction script
+│   ├── __init__.py
+│   ├── data_transformer.py   # Data loading and column renaming
+│   ├── database.py           # SQLite prediction logging
+│   ├── features.py           # Feature engineering pipeline
+│   ├── train_model.py        # Model training script
+│   └── predict.py            # Local batch prediction script
 └── notebooks/
-    └── power_quant.ipynb   # Original exploratory modeling notebook
+    └── power_quant.ipynb     # Original exploratory modeling notebook
 ```
 
 ## Model
@@ -75,6 +93,18 @@ The deployed model is a LightGBM classifier trained on engineered electricity-ma
 - hour-of-day interaction features
 
 The model outputs a probability that the real-time price is lower than the day-ahead price.
+
+## SQLite Prediction Logging
+
+The deployed API includes lightweight SQLite logging for prediction request summaries. Each CSV prediction request records:
+
+- upload time
+- uploaded filename
+- number of prediction rows
+- mean predicted probability
+- minimum predicted probability
+- maximum predicted probability
+
 
 ## Running Locally
 
@@ -100,12 +130,12 @@ Use the `POST /predict-csv` endpoint to upload a CSV file and return prediction 
 
 ## Data Availability
 
-The original electricity-market training data is not included in this repository due to data privacy and usage restrictions. This repository contains the deployment code, feature engineering pipeline, trained model artifact, and a small synthetic example input for demonstration purposes.
+The original electricity-market training data is not included in this repository due to data privacy and usage restrictions. This repository contains the deployment code, feature engineering pipeline, trained model artifact, and a small synthetic/example input preview for demonstration purposes.
+
 
 ## Future Improvements
 
-Planned improvements include:
-
-adding SQLite-based prediction logging
-adding a simple web interface for CSV upload
-improving model monitoring and input validation
+- improving the Hugging Face homepage with a more polished user interface
+- adding stronger input validation for uploaded CSV files
+- adding downloadable prediction results
+- extending SQLite logging to support basic model monitoring summaries

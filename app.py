@@ -4,6 +4,8 @@ import tempfile
 import pandas as pd
 from pathlib import Path
 from fastapi import FastAPI, UploadFile, File
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 from src.data_transformer import DataTransformer
 from src.features import build_features
@@ -28,14 +30,70 @@ def load_model():
 model, feature_columns = load_model()
 transformer = DataTransformer()
 init_db()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 def home():
-    return {
-        "message": "Electricity Price Direction Prediction API is running.",
-        "model": "LightGBM classifier",
-        "input": "Upload a CSV with the same format as test.csv.",
-    }
+    return """
+    <html>
+        <head>
+            <title>Electricity Price Direction Prediction API</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    max-width: 900px;
+                    margin: 40px auto;
+                    padding: 0 20px;
+                    line-height: 1.6;
+                }
+                img {
+                    max-width: 100%;
+                    border: 1px solid #ccc;
+                    border-radius: 8px;
+                    margin-top: 10px;
+                    margin-bottom: 20px;
+                }
+                a.button {
+                    display: inline-block;
+                    margin-right: 12px;
+                    padding: 10px 16px;
+                    background: #2563eb;
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 6px;
+                }
+                code {
+                    background: #f4f4f4;
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Electricity Price Direction Prediction API</h1>
+            <p>
+                This app predicts the probability that the real-time electricity price
+                is lower than the day-ahead price.
+            </p>
+
+            <p>
+                <a class="button" href="/docs">Open API Docs</a>
+                <a class="button" href="/static/sample_input.csv">Download Sample CSV</a>
+            </p>
+
+            <h2>Expected Input Format</h2>
+            <p>Upload a CSV with the same structure as the original test data.</p>
+
+            <img src="/static/example_input_table.png" alt="Example input table" />
+
+            <h2>Available Endpoints</h2>
+            <ul>
+                <li><code>POST /predict-csv</code> — upload a CSV and get predictions</li>
+                <li><code>GET /logs</code> — view recent SQLite prediction logs</li>
+            </ul>
+        </body>
+    </html>
+    """
 
 
 @app.post("/predict-csv")
